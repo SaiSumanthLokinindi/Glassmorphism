@@ -1,0 +1,187 @@
+@mixin flex($direction,$align-items,$justify-content) {
+    display: flex;
+    flex-direction: $direction;
+    align-items: $align-items;
+    justify-content: $justify-content;
+}
+
+.wrapper-div{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.left-wrapper-div{
+    height: 100%;
+    width: 100%;
+    @include flex(column,center,center);
+
+    button{
+        margin: 1rem auto;
+        padding: 0.8rem;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(30px);
+        color:white;
+        border: 1px transparent;
+        border-radius: 8px;
+        width: 25em;
+        max-width: 95%;
+        box-shadow: 0 0 4px 0 rgba(0,0,0,30%);
+        transition: all .2s ease-in-out;
+
+        &:hover{
+            background: rgba(255,255,255,0.3);
+        }
+    }
+
+    .glass{
+        div{
+            max-width: 17.8em;
+            @include flex(row,center,space-between);
+        }
+        button{
+            margin: 0;
+            width:auto;
+            box-shadow: 0 0 4px 0 rgba(0,0,0,10%);
+            transition: all 0.2s ease-in-out;
+    
+            &:hover{
+                background: rgba(255,255,255,0.3);
+                color: black;
+            }
+        }
+    }  
+}
+
+.copyBtnAlt{
+    background: #04e47496 !important;
+
+    &:hover{
+        color: white !important;
+    }
+}
+
+
+.right-wrapper-div{
+    height: 100%;
+    padding-top:2rem;
+    padding-bottom: 2rem;
+    overflow-y: auto;
+
+        .range-div{
+            width: 100%;
+        }
+
+        .backgrounds-div{
+            margin-top:1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 5rem);
+            grid-gap: 1rem;
+
+            img, .add-background-div{
+                height: 3rem;
+                width: 5rem;
+                border-radius:4px;
+                box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.034);
+                transition: all .2s ease-in-out;
+            }
+
+            img:hover{
+                transform: scale(1.1);
+                cursor: pointer;
+            }
+
+            .add-background-div{
+                border: 1px dashed rgba(255, 255, 255, 0.5);
+                @include flex(row,center,center);
+                &:hover{
+                    background-color: rgba(255, 255, 255, 0.3);
+                    cursor: pointer;
+                }
+            }
+        }
+        .url-input{
+            margin-top:2rem;
+            @include flex(column, flex-end,center);
+            input{
+                background-color: rgba(255, 255, 255, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: black;
+                height: 3rem;
+                padding: 0 1rem;
+                border-radius: 4px;
+                transition: all 0.2s linear;
+
+                &::placeholder{
+                    color: #545454;
+                }
+
+                &:hover{
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border: 1px solid white;
+                    outline: none;
+                }
+
+                &:focus{
+                    background-color: rgba(255, 255, 255, 0.7);
+                    border: 1px solid white;
+                    outline: none;
+                }
+            }
+
+            button{
+                margin-top: 1rem;
+                padding:0 1rem;
+                background-color: rgba(255, 255, 255, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                color:white;
+                transition: all 0.2s linear;
+
+                &:hover{
+                    background-color: rgba(255, 255, 255, 0.7);
+                    color:black;
+                }
+            }
+
+            .teritiary-btn{
+                margin-right:1rem;
+                background-color: transparent;
+            }
+        }
+}
+
+.marginB-1{
+    margin-bottom: 1.5rem;
+}
+
+.glass{
+    height: 20em;
+    width: 25em;
+    max-width: 95%;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    border: 1px solid transparent;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur( 30px );
+    box-shadow: 0 0 4px 0 rgba(0,0,0,30%);
+    overflow:hidden;
+    @include flex(column,center,center);
+}
+pre{
+    overflow: hidden;
+    font-size: 75%;
+}
+
+code{
+    color:white;
+    @include flex(column,center,center);
+    background: rgba(255,255,255,0.3);
+    padding: 1rem;
+    max-width: 25em;
+    max-height: 15em;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,15%);
+}
+

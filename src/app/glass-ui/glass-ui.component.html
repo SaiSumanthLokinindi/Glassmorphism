@@ -1,0 +1,88 @@
+<div class="wrapper-div h-100" #wrapperDiv
+  [style.background-image]="'url(assets/pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg)'">
+  <div class="h-100 container-fluid">
+    <div class="row h-100">
+      <div class="col-md-7 col-lg-8 col-xl-9 h-100" style="padding-top: 1rem;">
+        <div class="left-wrapper-div h-100 w-100">
+          <div class="glass" id="glassbox" #glassbox>
+            <pre><code class="w-100 h-100" *ngIf="cssCodeActive">{{cssCode}}</code></pre>
+            <div class="w-100" #codeactions *ngIf="cssCodeActive">
+              <button class="clear-btn" style="flex-grow:2;margin-right: 1rem;"
+                (click)="cssCodeActive = false;copied = false;">Close</button>
+              <button style="padding:0.8rem 1.3rem;" (click)="copyCssCode()" [ngClass]="{copyBtnAlt:copied}">
+                <fa-icon *ngIf="!copied; else codeCopied" [icon]="faCopy"></fa-icon>
+                <ng-template #codeCopied>
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                </ng-template>
+              </button>
+            </div>
+          </div>
+          <button #actionButton (click)="generateCSS();cssCodeActive = true;"
+            [ngStyle]="hover?{'background':colorHover}:{'background':colorNonHover}" (mouseover)="hover = true"
+            (mouseout)="hover = false">Generate CSS</button>
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-4 col-xl-3 right-wrapper-div">
+        <div class="marginB-1" appGlassCard [hex]="colorinput">
+          <div>Backgrounds</div>
+          <div class="backgrounds-div w-100">
+            <img *ngFor="let path of bgImages" [src]="path" (click)="changeBackgroundImage(path)">
+            <div class="bground-image" class="add-background-div" (click)="addBackgroundActive = !addBackgroundActive">
+              <h3>+</h3>
+            </div>
+          </div>
+          <div class="url-input" *ngIf="addBackgroundActive">
+            <input type="url" id="imageURL" #imageURL placeholder="Image URL">
+            <div>
+              <button class="teritiary-btn" (click)="addBackgroundActive = !addBackgroundActive">Cancel</button>
+              <button (click)="addBackground(imageURL.value)"> + Add </button>
+            </div>
+          </div>
+        </div>
+        <div class="w-100 marginB-1" appGlassCard [hex]="colorinput">
+          <div class="range-div marginB-1">
+            <label for="heightInput">Height</label><br>
+            <input type="range" id="heightInput" class="slider" #heightInput min=20 max=50 [(ngModel)]="heightinput"
+              (ngModelChange)="changeHeight()">
+          </div>
+          <div class="range-div marginB-1">
+            <label for="widthInput">Width</label><br>
+            <input type="range" id="widthInput" #widthInput min=25 max=50 [(ngModel)]="widthinput"
+              (ngModelChange)="changeWidth()">
+          </div>
+          <div class="range-div marginB-1">
+            <label for="borderInput">Border</label>
+            <div class="float-right">{{borderinput}}px</div><br>
+            <input type="range" id="borderInput" #borderInput min=0 max=10 [(ngModel)]="borderinput"
+              (ngModelChange)="changeBorder()">
+          </div>
+          <div class="range-div">
+            <label for="borderRadius">Border Radius</label>
+            <div class="float-right">{{borderradius}}px</div><br>
+            <input type="range" id="borderRadius" #borderRadius min=0 max=100 [(ngModel)]="borderradius"
+              (ngModelChange)="changeBorderRadius()">
+          </div>
+        </div>
+        <div class="range-div marginB-1" appGlassCard [hex]="colorinput">
+          <label for="blurInput">Blur</label>
+          <div class="float-right">{{blurinput}}px</div><br>
+          <input type="range" id="blurInput" #blurInput min=0 max=100 [(ngModel)]="blurinput"
+            (ngModelChange)="changeBlur()">
+        </div>
+        <div class="w-100" appGlassCard [hex]="colorinput">
+          <div class="range-div marginB-1">
+            <label for="colorInput">Color</label>
+            <div class="float-right">{{colorinput}}</div><br>
+            <input type="color" id="colorInput" #colorInput [(ngModel)]="colorinput" (ngModelChange)="changeColor()">
+          </div>
+          <div class="range-div">
+            <label for="opacityInput">Opacity</label>
+            <div class="float-right">{{opacityinput}}%</div><br>
+            <input type="range" id="opacityInput" #opacityInput min=0 max=50 [(ngModel)]="opacityinput"
+              (ngModelChange)="changeOpacity()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
