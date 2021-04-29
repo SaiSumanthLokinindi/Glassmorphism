@@ -26,16 +26,22 @@
         <div class="marginB-1" appGlassCard [hex]="colorinput">
           <div>Backgrounds</div>
           <div class="backgrounds-div w-100">
-            <img *ngFor="let path of bgImages" [src]="path" (click)="changeBackgroundImage(path)">
-            <div class="bground-image" class="add-background-div" (click)="addBackgroundActive = !addBackgroundActive">
+            <img *ngFor="let image of bgImages" [src]="image.path" [alt]="image.alt" (click)="changeBackgroundImage(image.path)">
+            <div class="bground-image" class="add-background-div"
+              (click)="addBackgroundActive = !addBackgroundActive;invalidImageURL = false;emptyImageURL = false;">
               <h3>+</h3>
             </div>
           </div>
           <div class="url-input" *ngIf="addBackgroundActive">
-            <input type="url" id="imageURL" #imageURL placeholder="Image URL">
+            <input type="url" id="imageURL" #imageURL='ngModel' placeholder="Image URL*"
+              [ngClass]="{imgUrlError: emptyImageURL || invalidImageURL }" [(ngModel)]="imageurl"
+              (keyup)="invalidImageURL = false;emptyImageURL = false;">
+            <div class="w-100" *ngIf="emptyImageURL"><small>URL required</small></div>
+            <div class="w-100" *ngIf="invalidImageURL"><small>Invalid URL</small></div>
             <div>
-              <button class="teritiary-btn" (click)="addBackgroundActive = !addBackgroundActive">Cancel</button>
-              <button (click)="addBackground(imageURL.value)"> + Add </button>
+              <button class="teritiary-btn"
+                (click)="addBackgroundActive = !addBackgroundActive;invalidImageURL = false;emptyImageURL = false;">Cancel</button>
+              <button (click)="addBackground()"> + Add </button>
             </div>
           </div>
         </div>

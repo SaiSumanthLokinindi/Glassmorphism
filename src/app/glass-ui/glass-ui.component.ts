@@ -1,6 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
+type Images = {
+  path:string;
+  alt:string;
+}
+
 @Component({
   selector: 'app-glass-ui',
   templateUrl: './glass-ui.component.html',
@@ -19,14 +24,26 @@ export class GlassUIComponent implements AfterViewInit {
   colorinput: string = "#FFFFFF";
   opacityinput: number = 10;
   addBackgroundActive: boolean = false;
-  bgImages: string[] = [
-    "assets/pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
-    "assets/pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
-    "assets/pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
-  ];
+  bgImages: Images[] = [
+    {
+      path:"assets/pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
+      alt: "pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
+    },
+    {
+      path:"assets/pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
+      alt: "pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
+    },
+    {
+      path:"assets/pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
+      alt: "pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
+    }
+  ]
   cssCodeActive: boolean = false;
   cssCode!: string;
   copied: boolean = false;
+  imageurl!:string;
+  emptyImageURL:boolean = false;
+  invalidImageURL:boolean= false;
   colorHover: string = "rgba(255,255,255,0.3)";
   colorNonHover: string = "rgba(255,255,255,0.1)";
   hover: boolean = false;
@@ -103,10 +120,36 @@ export class GlassUIComponent implements AfterViewInit {
     this.renderer.setStyle(this.wrapperDiv.nativeElement, 'background-image', `url(${path})`);
   }
 
-  addBackground(path: string): void {
-    this.bgImages.push(path);
-    this.changeBackgroundImage(path);
-    this.cd.detectChanges();
+  validateImageURL():boolean{
+    let regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+
+    if(!this.imageurl){
+      this.emptyImageURL = true;
+      this.invalidImageURL = false;
+      return true;
+    }
+    else if(this.imageurl.match(regex)){
+      this.invalidImageURL = false;
+      this.emptyImageURL = false;
+      return false;
+    }
+    else{
+      this.invalidImageURL = true;
+      this.emptyImageURL = false;
+      return true;
+    }
+  }
+
+  addBackground(): void {
+    if(!this.validateImageURL()){
+      let image:Images ={
+        path: this.imageurl,
+        alt: this.imageurl.substring((this.imageurl.lastIndexOf('/')+1),this.imageurl.length)
+      }
+      this.bgImages.push(image);
+      this.changeBackgroundImage(image.path);
+      this.cd.detectChanges();
+    }
   }
 
   generateCSS(): void {
