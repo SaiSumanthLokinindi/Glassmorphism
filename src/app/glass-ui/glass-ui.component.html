@@ -24,9 +24,32 @@
       </div>
       <div class="col-md-5 col-lg-4 col-xl-3 right-wrapper-div">
         <div class="marginB-1" appGlassCard [hex]="colorinput">
+          <div class="info-div">
+            <section>
+              <h2>Glassmorphism</h2>
+              <p>
+                Glassmorphism is a UI design trend with the main aspect being a semi-transparent blurred background
+                combined with a subtle border and a soft box-shadow.
+              </p>
+              <p style="margin-bottom:1rem;margin-top:-0.5rem;">
+                Made with<fa-icon [icon]="faHeart" style="margin:0 0.5rem;"></fa-icon>by Sai Sumanth.
+              </p>
+            </section>
+          </div>
+          <div class="social-btns">
+            <a class="glass-button w-100 text-truncate" style="margin-right:1rem;" href="https://www.buymeacoffee.com/saisumanth"
+              target="_blank"><img alt="Buy me a coffee" width="20px" height="20px"
+                src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"> Buy me a coffee</a>
+            <a class="glass-button" href="https://github.com/SaiSumanthLokinindi/Glassmorphism" target="_blank">
+              <fa-icon [icon]="faGithub"></fa-icon>
+            </a>
+          </div>
+        </div>
+        <div class="marginB-1" appGlassCard [hex]="colorinput">
           <div>Backgrounds</div>
           <div class="backgrounds-div w-100">
-            <img *ngFor="let image of bgImages" [src]="image.path" [alt]="image.alt" (click)="changeBackgroundImage(image.path)">
+            <img *ngFor="let image of bgImages" [src]="image.path" [alt]="image.alt"
+              (click)="changeBackgroundImage(image.path)">
             <div class="bground-image" class="add-background-div"
               (click)="addBackgroundActive = !addBackgroundActive;invalidImageURL = false;emptyImageURL = false;">
               <h3>+</h3>

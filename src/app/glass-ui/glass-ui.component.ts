@@ -1,5 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faCopy,
+  faCheckCircle,
+  faHeart
+} from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 type Images = {
   path:string;
@@ -15,6 +20,8 @@ export class GlassUIComponent implements AfterViewInit {
 
   faCopy = faCopy;
   faCheckCircle = faCheckCircle;
+  faGithub = faGithub;
+  faHeart = faHeart;
   title = 'playground';
   heightinput: number = 20;
   widthinput: number = 25;
@@ -79,12 +86,10 @@ export class GlassUIComponent implements AfterViewInit {
   changeBorder() : void{
     if(this.borderinput === 0){
       this.renderer.setStyle(this.glass, 'border' , 'none');
-      this.renderer.setStyle(this.codeActions.nativeElement,'max-width', '17.8em');
     }
     else{
       const colors: number[] = this.getRGB();
       this.renderer.setStyle(this.glass,'border', `${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100})`);
-      this.renderer.setStyle(this.codeActions.nativeElement,'max-width', '18.8em');
     }
     this.generateCSS();
   }
@@ -155,7 +160,7 @@ export class GlassUIComponent implements AfterViewInit {
   generateCSS(): void {
     this.copied = false;
     const colors: number[] = this.getRGB();
-    this.cssCode = `background : rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\nborder-radius : ${this.borderradius}px;\n${(this.borderinput > 0 ? `border : ${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\n`: "")}backdrop-filter: blur(${this.blurinput}px);\n-webkit-backdrop-filter: blur(${this.blurinput}px);\nbox-shadow: 0 0 4px 0 rgba(0,0,0,30%);`
+    this.cssCode = `background : rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\nborder-radius : ${this.borderradius}px;\n${(this.borderinput > 0 ? `border : ${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\n`: `border : 1px transparent;\n`)}backdrop-filter: blur(${this.blurinput}px);\n-webkit-backdrop-filter: blur(${this.blurinput}px);\nbox-shadow: 0 0 4px 0 rgba(0,0,0,30%);`
   }
 
   copyCssCode(): void {
@@ -168,6 +173,9 @@ export class GlassUIComponent implements AfterViewInit {
     document.execCommand('copy');
     document.body.removeChild(el);
     this.copied = true;
+    setTimeout(()=>{
+      this.copied = false;
+    },2000);
   }
 
 }
