@@ -1,14 +1,15 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { 
+import {
   faCopy,
   faCheckCircle,
-  faHeart
+  faHeart,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-type Images = {
-  path:string;
-  alt:string;
+type Image = {
+  path: string;
+  alt: string;
 }
 
 @Component({
@@ -22,35 +23,37 @@ export class GlassUIComponent implements AfterViewInit {
   faCheckCircle = faCheckCircle;
   faGithub = faGithub;
   faHeart = faHeart;
+  faTimesCircle = faTimesCircle;
   title = 'playground';
   heightinput: number = 20;
   widthinput: number = 25;
-  blurinput: number = 16;
-  borderinput:number = 0;
+  blurinput: number = 30;
+  borderinput: number = 0;
   borderradius: number = 12;
   colorinput: string = "#FFFFFF";
   opacityinput: number = 10;
   addBackgroundActive: boolean = false;
-  bgImages: Images[] = [
+  bgImages: Image[] = [
     {
-      path:"assets/pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
+      path: "assets/pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
       alt: "pawel-czerwinski-JEV7CrJTUNE-unsplash.jpg",
     },
     {
-      path:"assets/pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
+      path: "assets/pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
       alt: "pawel-czerwinski-yn97LNy0bao-unsplash.jpg",
     },
     {
-      path:"assets/pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
+      path: "assets/pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
       alt: "pawel-czerwinski-UF4SrDnu8ns-unsplash.jpg",
     }
   ]
   cssCodeActive: boolean = false;
   cssCode!: string;
   copied: boolean = false;
-  imageurl!:string;
-  emptyImageURL:boolean = false;
-  invalidImageURL:boolean= false;
+  imageurl!: string;
+  emptyImageURL: boolean = false;
+  invalidImageURL: boolean = false;
+  imageUrlMessage: string = ""
   colorHover: string = "rgba(255,255,255,0.3)";
   colorNonHover: string = "rgba(255,255,255,0.1)";
   hover: boolean = false;
@@ -83,13 +86,13 @@ export class GlassUIComponent implements AfterViewInit {
     this.generateCSS();
   }
 
-  changeBorder() : void{
-    if(this.borderinput === 0){
-      this.renderer.setStyle(this.glass, 'border' , 'none');
+  changeBorder(): void {
+    if (this.borderinput === 0) {
+      this.renderer.setStyle(this.glass, 'border', 'none');
     }
-    else{
+    else {
       const colors: number[] = this.getRGB();
-      this.renderer.setStyle(this.glass,'border', `${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100})`);
+      this.renderer.setStyle(this.glass, 'border', `${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput / 100})`);
     }
     this.generateCSS();
   }
@@ -108,8 +111,8 @@ export class GlassUIComponent implements AfterViewInit {
 
   changeColor(): void {
     const colors: number[] = this.getRGB();
-    this.renderer.setStyle(this.glass, 'background', `rgba(${colors[0]},${colors[1]},${colors[2]},0.1)`);
-    this.renderer.setStyle(this.actionButton.nativeElement, 'background', `rgba(${colors[0]},${colors[1]},${colors[2]},0.1)`);
+    this.renderer.setStyle(this.glass, 'background', `rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput / 100})`);
+    this.renderer.setStyle(this.actionButton.nativeElement, 'background', `rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput / 100})`);
     this.colorHover = `rgba(${colors[0]},${colors[1]},${colors[2]},0.3)`;
     this.colorNonHover = `rgba(${colors[0]},${colors[1]},${colors[2]},0.1)`;
     this.generateCSS();
@@ -125,31 +128,34 @@ export class GlassUIComponent implements AfterViewInit {
     this.renderer.setStyle(this.wrapperDiv.nativeElement, 'background-image', `url(${path})`);
   }
 
-  validateImageURL():boolean{
+  validateImageURL(): boolean {
+    this.imageUrlMessage = "";
     let regex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-
-    if(!this.imageurl){
+    if (!this.imageurl) {
       this.emptyImageURL = true;
       this.invalidImageURL = false;
+      this.imageUrlMessage = "URL required"
       return true;
     }
-    else if(this.imageurl.match(regex)){
+    else if (this.imageurl.match(regex)) {
       this.invalidImageURL = false;
       this.emptyImageURL = false;
+      this.imageUrlMessage = "";
       return false;
     }
-    else{
+    else {
       this.invalidImageURL = true;
       this.emptyImageURL = false;
+      this.imageUrlMessage = "Invalid URL";
       return true;
     }
   }
 
   addBackground(): void {
-    if(!this.validateImageURL()){
-      let image:Images ={
+    if (!this.validateImageURL() && !this.validateDuplicateImage()) {
+      let image: Image = {
         path: this.imageurl,
-        alt: this.imageurl.substring((this.imageurl.lastIndexOf('/')+1),this.imageurl.length)
+        alt: this.imageurl.substring((this.imageurl.lastIndexOf('/') + 1), this.imageurl.length)
       }
       this.bgImages.push(image);
       this.changeBackgroundImage(image.path);
@@ -157,10 +163,22 @@ export class GlassUIComponent implements AfterViewInit {
     }
   }
 
+  validateDuplicateImage(): boolean {
+    for (let i = 0; i < this.bgImages.length; i++) {
+      if (this.bgImages[i]?.path === this.imageurl) {
+        this.invalidImageURL = true;
+        this.emptyImageURL = false;
+        this.imageUrlMessage = "Image already exists";
+        return true;
+      }
+    }
+    return false;
+  }
+
   generateCSS(): void {
     this.copied = false;
     const colors: number[] = this.getRGB();
-    this.cssCode = `background : rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\nborder-radius : ${this.borderradius}px;\n${(this.borderinput > 0 ? `border : ${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput/100});\n`: `border : 1px transparent;\n`)}backdrop-filter: blur(${this.blurinput}px);\n-webkit-backdrop-filter: blur(${this.blurinput}px);\nbox-shadow: 0 0 4px 0 rgba(0,0,0,30%);`
+    this.cssCode = `background : rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput / 100});\nborder-radius : ${this.borderradius}px;\n${(this.borderinput > 0 ? `border : ${this.borderinput}px solid rgba(${colors[0]},${colors[1]},${colors[2]},${this.opacityinput / 100});\n` : `border : 1px transparent;\n`)}backdrop-filter: blur(${this.blurinput}px);\n-webkit-backdrop-filter: blur(${this.blurinput}px);\nbox-shadow: 0 0 4px 0 rgba(0,0,0,30%);`
   }
 
   copyCssCode(): void {
@@ -173,9 +191,9 @@ export class GlassUIComponent implements AfterViewInit {
     document.execCommand('copy');
     document.body.removeChild(el);
     this.copied = true;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.copied = false;
-    },2000);
+    }, 2000);
   }
 
 }

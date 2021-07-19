@@ -7,13 +7,15 @@
           <div class="glass" id="glassbox" #glassbox>
             <pre><code class="w-100 h-100" *ngIf="cssCodeActive">{{cssCode}}</code></pre>
             <div class="w-100" #codeactions *ngIf="cssCodeActive">
-              <button class="clear-btn" style="flex-grow:2;margin-right: 1rem;"
-                (click)="cssCodeActive = false;copied = false;">Close</button>
-              <button style="padding:0.8rem 1.3rem;" (click)="copyCssCode()" [ngClass]="{copyBtnAlt:copied}">
+              <button [ngClass]="{copyBtnAlt:copied}" style="flex-grow:2;margin-right: 1rem;" (click)="copyCssCode()">
                 <fa-icon *ngIf="!copied; else codeCopied" [icon]="faCopy"></fa-icon>
                 <ng-template #codeCopied>
                   <fa-icon [icon]="faCheckCircle"></fa-icon>
                 </ng-template>
+                <span *ngIf="!copied" style="padding: 0 1rem;">Copy</span>
+              </button>
+              <button style="padding:0.8rem 1.3rem;" class="clear-btn" (click)="cssCodeActive = false;copied = false;">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
               </button>
             </div>
           </div>
@@ -37,9 +39,9 @@
             </section>
           </div>
           <div class="social-btns">
-            <a class="glass-button w-100 text-truncate" style="margin-right:1rem;" href="https://www.buymeacoffee.com/saisumanth"
-              target="_blank"><img alt="Buy me a coffee" width="20px" height="20px"
-                src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"> Buy me a coffee</a>
+            <a class="glass-button w-100 text-truncate" style="margin-right:1rem;"
+              href="https://www.buymeacoffee.com/saisumanth" target="_blank"><img alt="Buy me a coffee" width="20px"
+                height="20px" src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"> Buy me a coffee</a>
             <a class="glass-button" href="https://github.com/SaiSumanthLokinindi/Glassmorphism" target="_blank">
               <fa-icon [icon]="faGithub"></fa-icon>
             </a>
@@ -50,17 +52,17 @@
           <div class="backgrounds-div w-100">
             <img *ngFor="let image of bgImages" [src]="image.path" [alt]="image.alt"
               (click)="changeBackgroundImage(image.path)">
-            <div class="bground-image" class="add-background-div"
+            <div class="add-background-div" *ngIf="!addBackgroundActive"
               (click)="addBackgroundActive = !addBackgroundActive;invalidImageURL = false;emptyImageURL = false;">
               <h3>+</h3>
             </div>
           </div>
           <div class="url-input" *ngIf="addBackgroundActive">
             <input type="url" id="imageURL" #imageURL='ngModel' placeholder="Image URL*"
-              [ngClass]="{imgUrlError: emptyImageURL || invalidImageURL }" [(ngModel)]="imageurl"
+              [ngClass]="{'imgUrlError': emptyImageURL || invalidImageURL }" [(ngModel)]="imageurl"
               (keyup)="invalidImageURL = false;emptyImageURL = false;">
-            <div class="w-100" *ngIf="emptyImageURL"><small>URL required</small></div>
-            <div class="w-100" *ngIf="invalidImageURL"><small>Invalid URL</small></div>
+            <div class="w-100" *ngIf="emptyImageURL"><small>{{imageUrlMessage}}</small></div>
+            <div class="w-100" *ngIf="invalidImageURL"><small>{{imageUrlMessage}}</small></div>
             <div>
               <button class="teritiary-btn"
                 (click)="addBackgroundActive = !addBackgroundActive;invalidImageURL = false;emptyImageURL = false;">Cancel</button>

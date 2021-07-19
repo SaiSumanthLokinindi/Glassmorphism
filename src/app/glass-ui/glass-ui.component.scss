@@ -92,7 +92,7 @@
             }
 
             .add-background-div{
-                border: 1px dashed rgba(255, 255, 255, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.3);
                 @include flex(row,center,center);
                 &:hover{
                     background-color: rgba(255, 255, 255, 0.3);
